@@ -1,0 +1,18 @@
+\section*{Discussion}
+
+We have introduced Minerva a graph based algorithm to provide a  solution to the barcode deconvolution problem. By design Minerva provides conservative solutions to barcode deconvolution for metagenomics and uses essentially no information (except \textit{k}-mer overlaps) about the sequences being clustered. We note that it will be beneficial to test Minerva on more complex communities. As such Minerva is a relatively pure demonstration of how information can be extracted from Linked-Reads. With some modification the algorithms underlying Minerva may even be useful for detecting structural variations and other genetic structures in the human genome.
+
+However, the current version of Minerva could be enhanced by leveraging a number of practical sequence features: such as known taxonomic assignment, GC content, tetramer frequency, or motifs. These have been shown to be good indicators of lineage in metagenomics and could be easily incorporated to improve Minerva's clusterings. In particular, taxonomic assignments could be incorporated into Minerva to evaluate barcode deconvolution, since there is no a-priori reason to think reads with a known taxonomic classification would be deconvolved more effectively than reads that could not be classified. 
+
+The current version of Minerva provides reasonable performance but still represents a potential bottleneck for workflows using Linked Reads. A large performance issue is Minerva's routine to calculate the size of an intersection between two sets which is naive and exact. \citep{Jain2017} has shown that bloom filters can be effectively used to speed up the calculation of set intersection in biology with acceptable errors. Future versions of Minerva could employ similar techniques to improve performance. Minerva uses the same parameters to process every barcode, however the nature of Linked-Read sequencing provides a rich source of information that could be used to optimize model parameters for deconvolving individual barcodes. This would require a more thorough mathematical model of linked reads which we leave to a future work. Similarly, external sequence annotation could be incorporated as a practical approach to setting parameters for individual barcodes though it is unlikely that such a technique would generalize to non-microbial applications.
+
+Of particular interest to us is the possibility of using Minerva to directly improve downstream applications. For simple applications Minerva may be used with a single set of parameters to produce a deconvolution that meets certain requirements. For applications built to take advantage of barcode deconvolution Minerva could be run with multiple parameters to produce increasingly strict tiers of enhancement. This may be particularly important for de Bruijn graph assembly. DBG assembly typically relies on effectively trimming and finding paths through a de Bruijn graph. Multiple tiers of linkage between reads could be used to inform trimming or path finding programs about likely paths and spurious connections. This could likely be modeled either as an information theory or probabilistic approach depending on the situation and assembler. 
+
+Overall we believe that Minerva is an important step towards building techniques designed to take advantage of Linked-Reads. Linked-Reads have the potential to dramatically improve detection of large genetic structures without dramatically increasing sequencing costs and while taking advantage of existing techniques to process short reads.
+
+
+% Iman: need to say something about assembly applications 
+
+
+
+% \newpage

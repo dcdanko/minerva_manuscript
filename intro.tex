@@ -1,0 +1,82 @@
+\section*{Introduction}
+%\subsection{Linked-Read Sequencing}
+
+Recently, long-read sequencing technologies (e.g. PacBio, Oxford Nanopore) have become commercially available. These techniques promise the ability to improve {\it de novo} assembly \citep{Jain2017}, particularly in metagenomics~\citep{Frank2016}. While these technologies offer much longer reads than standard short-read sequencing, their base-pair error rates are substantially higher than short reads (10-15\% error vs. 0.3\%). More important, long-read technologies have substantially higher costs, lower throughput, and require large amounts of DNA, or PCR amplification, as input. Currently, this makes long-reads impractical for large-scale screening of whole genome or metagenome samples and most low-input clinical samples. 
+
+As an alternative, low-cost, and low-input ($\sim$1ng) DNA library preparation techniques using microfluidic 3' barcoding methods have recently emerged (e.g. Moleculo/Illumina, 10x Genomics) that address these shortcomings. With these new technologies, input DNA is sheared into long fragments of $\sim$10-100kbp. After shearing, a 3' barcode is ligated to short reads from the fragments such that short reads from the same fragment share the same 3' barcode (N.B. the 3' barcode is unrelated to the standard 5' barcode used for sample multiplexing). Finally, the short reads are sequenced using industry standard sequencing technologies (e.g. Illumina HiSeq). This process is commonly referred to as, Linked-Read sequencing. Linked-Reads offer additional {\em long-range} information over standard short-reads. We refer to the set of reads that share a 3' barcode as a Read Cloud. For a more detailed explanation of the process of Linked-Read sequencing we refer the reader to \citep{Zheng2016}.
+
+Reads with matching 3' barcodes are more likely to have emerged from the same fragment of DNA than two randomly sampled reads. However, each fragment of DNA is only fractionally covered by reads. This increases the amount of long range information obtained from a given experiment but makes it impossible to assemble reads from a single barcode into a contiguous stretch of sequence. This tradeoff has been used recently to phase large-scale somatic structural variations~\citep{Spies2017,Greer2017}. 
+
+State of the art Linked-Read sequencing systems use the same 3' barcode to label reads from several fragments of DNA. Existing systems hon the order of $10^6$ 3' barcodes; loading multiple fragments of DNA into the same 3' barcodes is critical for high throughput experiments. In particular, in our work using the 10x Genomics system, we observed that there were 2-20 long fragments of DNA per 3' barcode (supplementary figure 1) and that 3' barcodes with more reads tended to have more fragments. This can complicate downstream applications. In the absence of other information, it is difficult to distinguish the random assortment of reads into a 3' barcode from an actual structural variation or a different source genome.
+
+To address this critical issue, we define the barcode deconvolution problem. Briefly, each group of reads that share a 3' barcode has an unobserved set of fragments from which each read was drawn. The barcode deconvolution problem is the problem of assigning each read with a given 3' barcode to a group such that every read in the group came from the same fragment and so there is only one group per fragment. We note that a fragment assignment is stricter than genomic assignment. Each read from the same fragment necessarily came from the same genome but it is possible to have multiple fragments from the same genome whose reads share the same 3' barcode.
+
+Linked-Reads provide significantly more information about the proximity of short reads than standard short read sequencing. With the exception of very common or repetitive sequences, the co-occurrence of particular sequences across several 3' barcodes provides evidence that the co-occurring sequences were drawn from the same underlying DNA molecules.
+
+
+
+% Iman: I added this additional paragraph here for people who may be less familiar with 10x.  Please check.
+
+%With respect to sequence coverage, Linked-Read sequencing technologies consist of two key parameters: $C_f$, the average physical coverage of the target genome with long fragments, and $C_r$, the average coverage of long fragments with standard short-reads. The overall sequence coverage can be, thus, approximated as $C=C_f \times C_r$. In the case of the 10x Genomics system, which is the technique we used to generate our metagenomics Linked-Read data, $C_r$ is kept very light (e.g. $0.1-0.2\times$; covering each long fragment only fractionally), while the total coverage $C$ is in the typical range of standard short-read experiments.
+
+% * <1dayac@gmail.com> 2017-11-03T20:53:02.044Z:
+% 
+% Here we call process of ligation as sequencing. This is not completely correct
+% 
+% ^.
+
+ %In this work we refer to the set of reads that share a 3' barcode as a {\bf Read Cloud}.
+
+%Each long fragment of DNA is only fractionally covered by short reads (typically 10-20\%). Thus, reads from the same fragment do not typically overlap (this is not the case with certain older technologies and types of sample preparation). As such it is not possible to do de novo assembly using only reads with the same barcode. However, 
+
+
+
+%This principle is used implicitly by most existing Linked-Read tools to develop a consensus about the underlying DNA.
+\paragraph{Applications of Linked-Reads in Metagenomics}
+
+Linked-Reads have several potential benefits for metagenomic research compared to standard short-reads. Linked-Reads carry information about long stretches of sequence. In principle this information can be used to improve taxonomic classification of reads, improve the assembly of microbial genomes, identify horizontally transferred sequences, quantify the genetic structure of low-abundance organisms and catalog intra-sample genetic structural variants. In the near term, algorithms for analyzing short read sequences can be used on Linked-Read data without modification which makes linked reads a practical choice for many studies.
+
+Compared to long-read sequencing, Linked-Reads can be used to sequence samples far more deeply for the same amount of money and can accept much smaller amounts of input DNA. This is important for metagenomics; even at the same read depth, Linked-Reads may be more useful for studying low abundance organisms because Linked-Reads span a much longer stretch of a genome for the number of bases sequenced (i.e. very high physical coverage) and could be used to resolve microbial structural variation.
+
+In this paper, we address the barcode deconvolution problem, a fundamental problem of using Linked-Reads for metagenomics. We show that addressing the barcode deconvolution problem improves downstream results for two demonstration applications.
+
+\paragraph{The Barcode Deconvolution Problem}
+
+We formally define the barcode deconvolution problem for a single 3' barcode. We note that our solution requires information from multiple 3' barcodes but that this is not necessary to state the barcode deconvolution problem generally. 
+
+As input we are given a set of $n$ reads from the same Read Cloud. Each read has the same 3' barcode and an unobserved class that represents the fragment from which the read was drawn. For a given 3' barcode with $n$ reads drawn from $f$ fragments we have $\vec{R} = \langle r_1, \cdots, r_n \rangle$ where $r_i$ represents the unobserved class for read $i$, and $\vec{F}$, the set of possible fragment classes $[1, f]$. 
+
+A solution to the barcode deconvolution problem for a single read cloud would be a function mapping a set of read classes to fragment classes 
+
+\[D: \vec{R} \mapsto \vec{F}\]
+
+such that the function produces the same value for reads from the same fragment for all $n$ reads in $\vec{R}$
+
+\[D(i) = D(j),  \forall_j  r_i = r_j, \forall_i \in 1:|\vec{R}|\] 
+
+A solution to the barcode deconvolution problem for a set of Read Clouds would be a map from each Read Cloud to a function which solves the barcode deconvolution problem for that Read Cloud.
+
+When a reference genome is available the barcode deconvolution problem is relatively trivial, so long as major structural variants are absent. All individual reads from the same Read Cloud can be mapped to the reference genome using any good read alignment method. Reads from the same fragment will tend to be clustered near one another on the reference genome; there is little chance that reads from different fragments in the same Read Cloud will be proximal, unless the reference genome is very small. However, if a reference genome is not available, is small, or structural variation is present read mapping may not provide a good solution to the barcode deconvolution problem. All of these conditions are common in metagenomics.
+
+To the best of our knowledge, we are the first to formally describe the barcode deconvolution problem.
+
+% highlight some previous work using short-reads
+
+\paragraph{Summary}
+
+We have developed a novel method, Minerva, that explicitly uses information from sequence overlap between Read Clouds to approximately solve the barcode deconvolution problem for metagenomic samples. Our approach was inspired by topic modeling in Natural Language Processing (NLP) which studies methods to find groups of co-occurring words in text. We demonstrate how our technique can be effectively applied to real metagenomic Linked-Read data  and improve analysis for two example use cases.
+
+We present our solution to the barcode deconvolution problem in details. We also develop a probabilistic generative model justifying key assumptions of our procedure. We report our negative results, models that we tested but performed poorly (supplementary materials). 
+
+
+
+
+
+
+
+
+
+
+
+
+

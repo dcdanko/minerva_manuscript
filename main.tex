@@ -1,0 +1,108 @@
+\documentclass[a4paper]{article}
+
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{multirow}
+%% Sets page size and margins
+\usepackage[a4paper,top=1in,bottom=1in,left=1in,right=1in,marginparwidth=1in]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[sort]{natbib}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{authblk}
+\usepackage{booktabs}
+\usepackage{flafter}
+\usepackage{lscape}
+\usepackage{afterpage}
+\usepackage{placeins}
+\usepackage{wrapfig} % Allows in-line images
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+
+\FloatBarrier
+\pagestyle{empty}
+\title{Minerva: An Alignment and Reference Free Approach to Deconvolve Linked-Reads for Metagenomics}
+
+\author[1,2]{David C. Danko}
+\author[1,2]{Dmitry Meleshko}
+\author[2]{Daniela Bezdan}
+\author[2,3]{Christopher Mason}
+\author[2,4,$\ast$]{Iman Hajirasouliha}
+
+\affil[1]{\small 
+Tri-Institutional Computational Biology \& Medicine Program, Weill Cornell Medicine of Cornell University, NY, USA}
+\affil[2]{\small Institute for Computational Biomedicine, Department of Physiology and Biophysics, Weill Cornell Medicine of Cornell University, NY, USA}
+\affil[3]{\small The Feil Family Brain and Mind Research Institute, Weill Cornell Medicine, NY, USA}
+\affil[4]{\small Englander Institute for Precision Medicine, The Meyer Cancer Center, Weill Cornell Medicine, NY, USA}
+
+%\affil[$\ast$]{\small Corresponding author}
+\date{}
+\begin{document}
+
+
+\maketitle
+
+\paragraph{*Corresponding author}
+%Iman Hajirasouliha, Ph.D.\\
+%Weill Cornell Medicine of Cornell University\\
+%1305 York Avenue, New York, NY, 10021, USA\\
+%Phone: 646.962.7804\\
+E-mail: imh2003@med.cornell.edu \\
+
+\input{abstract}
+{\bf Keywords:} Linked-Read sequencing, Metagenomics, Barcode deconvolution, Enhanced Read Clouds, 10x Genomics
+
+\newpage
+\pagestyle{plain}
+\input{intro}
+
+
+\input{results}
+\input{conclusion}
+\input{methods}
+
+\section*{Data Access}
+
+All raw sequencing reads from this study have been submitted to the NCBI Sequencing Read Archive (SRA; https://www.ncbi.nlm.nih.gov/sra) under accession number PRJNA505182. All code from this study is available in the supplementary materials and at \url{https://github.com/dcdanko/minerva_barcode_deconvolution}.
+
+\section*{Acknowledgement}
+
+We acknowledge Victoria Popic and her team at Illumina Inc. for fruitful discussions on the problem and her help in benchmarking. We sincerely thank 10x Genomics Inc. for providing us valuable real sequencing data sets used in this study for evaluations. We also thank Stephen Williams of 10x Genomics Inc. for coordinating the 10x Metagenomics consortium (a small group of laboratories committed to studying the role of Linked-Reads in metagenomics) in which our team participates. DCD and DM were supported by the Tri-Institutional Training Program in Computational Biology and Medicine (CBM) funded by the NIH grant 1T32GM083937. This work was also supported by start-up funds (Weill Cornell Medicine) to IH and a National Science Foundation (NSF) grant under award number IIS-1840275 to IH and CM.
+
+
+
+%\bibliographystyle{unsrt}
+%\bibliographystyle{plain}
+
+\bibliographystyle{myagsm}
+\setcitestyle{semicolon}
+
+%\bibliographystyle{apalike}
+\bibliography{bibliographies}
+
+%\input{supplement}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
